@@ -83,4 +83,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
 
+    //image Circle view dependency
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
 }

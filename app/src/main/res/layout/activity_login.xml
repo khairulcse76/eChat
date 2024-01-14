@@ -32,7 +32,7 @@
         android:layout_marginEnd="32dp"
         android:background="@drawable/inpute_bg"
         android:ems="10"
-        android:hint="User or E-Mail"
+        android:hint="User or E-mail"
         android:inputType="text"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
@@ -46,14 +46,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewReg" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/inputLoginPass"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/inpute_bg"
         android:ems="10"
         android:hint="Password"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
@@ -75,10 +75,10 @@
         android:textColor="@color/colorgreen"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText2"
+        app:layout_constraintEnd_toEndOf="@+id/inputLoginPass"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+        app:layout_constraintStart_toStartOf="@+id/inputLoginPass"
+        app:layout_constraintTop_toBottomOf="@+id/inputLoginPass" />
 
     <TextView
         android:id="@+id/txtVForgotPass"
@@ -89,10 +89,10 @@
         android:textColor="@color/Red"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btnLogin"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText2"
+        app:layout_constraintEnd_toEndOf="@+id/inputLoginPass"
         app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2"
+        app:layout_constraintStart_toStartOf="@+id/inputLoginPass"
+        app:layout_constraintTop_toBottomOf="@+id/inputLoginPass"
         app:layout_constraintVertical_bias="0.19" />
 
     <LinearLayout

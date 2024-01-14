@@ -6,4 +6,171 @@
     android:layout_height="match_parent"
     tools:context=".SetupProfileActivity">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/main_app_bar" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:cardCornerRadius="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/profile"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.003" />
+
+            <EditText
+                android:id="@+id/inputName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_bg_setub"
+                android:ems="14"
+                android:hint="Full Name"
+                android:inputType="text"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+            <EditText
+                android:id="@+id/inpUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/input_bg_setub"
+                android:ems="14"
+                android:hint="User Name"
+                android:inputType="text"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="@+id/inputName"
+                app:layout_constraintStart_toStartOf="@+id/inputName"
+                app:layout_constraintTop_toBottomOf="@+id/inputName" />
+
+            <EditText
+                android:id="@+id/inputphoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/input_bg_setub"
+                android:ems="14"
+                android:hint="Phone Number"
+                android:inputType="number"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="@+id/inpUserName"
+                app:layout_constraintStart_toStartOf="@+id/inpUserName"
+                app:layout_constraintTop_toBottomOf="@+id/inpUserName" />
+
+            <EditText
+                android:id="@+id/inputProfession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/input_bg_setub"
+                android:ems="14"
+                android:hint="Profession"
+                android:inputType="text"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="@+id/inputphoneNumber"
+                app:layout_constraintStart_toStartOf="@+id/inputphoneNumber"
+                app:layout_constraintTop_toBottomOf="@+id/inputphoneNumber" />
+
+            <EditText
+                android:id="@+id/inputCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/input_bg_setub"
+                android:ems="14"
+                android:hint="City"
+                android:inputType="text"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="@+id/inputProfession"
+                app:layout_constraintStart_toStartOf="@+id/inputProfession"
+                app:layout_constraintTop_toBottomOf="@+id/inputProfession" />
+
+            <EditText
+                android:id="@+id/inputCountry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/input_bg_setub"
+                android:ems="14"
+                android:hint="Country"
+                android:inputType="text"
+                android:padding="10dp"
+                android:paddingStart="20dp"
+                android:textColorHint="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="@+id/inputCity"
+                app:layout_constraintStart_toStartOf="@+id/inputCity"
+                app:layout_constraintTop_toBottomOf="@+id/inputCity" />
+
+            <Button
+                android:id="@+id/btnsave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_2_bg"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/inputCountry"
+                app:layout_constraintStart_toStartOf="@+id/inputCountry"
+                app:layout_constraintTop_toBottomOf="@+id/inputCountry" />
+
+            <TextView
+                android:id="@+id/txtSkip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="40dp"
+                android:text="Skip"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnsave"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
