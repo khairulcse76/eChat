@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.AppBarLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@drawable/background_1"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccent"
     android:id="@+id/app_bar"
-    >
+    android:textAlignment="center"
+    app:titleTextColor="@color/black">
 
-</com.google.android.material.appbar.AppBarLayout>
+</androidx.appcompat.widget.Toolbar>

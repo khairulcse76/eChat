@@ -3,6 +3,7 @@ package com.example.echat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +30,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.security.PrivateKey;
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -47,10 +50,22 @@ public class SetupProfileActivity extends AppCompatActivity {
 
     ProgressDialog myProgresBar;
 
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_profile);
+
+        toolbar = findViewById(R.id.include);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().setTitle("Setup Profile");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }else {
+            Toast.makeText(this, "Action Bar Load Fail...!!", Toast.LENGTH_LONG).show();
+        }
+
+        //Objects.requireNonNull(getSupportActionBar()).setTitle("Profile Setup");
 
         profile_img         = findViewById(R.id.profile_image);
         inputName           = findViewById(R.id.inputName);
