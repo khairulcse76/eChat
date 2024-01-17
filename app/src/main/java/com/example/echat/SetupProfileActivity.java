@@ -64,7 +64,7 @@ public class SetupProfileActivity extends AppCompatActivity {
 
         //Objects.requireNonNull(getSupportActionBar()).setTitle("Profile Setup");
 
-        profile_img         = findViewById(R.id.profile_image_view);
+        profile_img         = findViewById(R.id.post_profile_Image_view);
         inputName           = findViewById(R.id.inputName);
         inputUserName       = findViewById(R.id.inpUserName);
         inputPhoneNumber    = findViewById(R.id.inputphoneNumber);

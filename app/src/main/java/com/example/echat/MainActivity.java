@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference dbRef, postRef;
     StorageReference storeImgRef;
 
-    String profileImgV,fullNameV;
+    String profileImgV,fullNameV, userNameV;
 
     CircleImageView navHeaderImgV;
     TextView navHeaderUserName, input_description;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         View view = navigationView.inflateHeaderView(R.layout.nav_header_layout);
-        navHeaderImgV = view.findViewById(R.id.profile_image_view);
+        navHeaderImgV = view.findViewById(R.id.post_profile_Image_view);
         navHeaderUserName = view.findViewById(R.id.txtViewUser);
 
         btn_upload_post.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id==R.id.nav_find_friend) {
                     Toast.makeText(MainActivity.this, "Click to Find Friend", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_profile) {
+                    Intent intent  = new Intent(MainActivity.this,SetupProfileActivity.class);
+                    startActivity(intent);
+
                     Toast.makeText(MainActivity.this, "Click to Profile", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_logout) {
                     Toast.makeText(MainActivity.this, "Click to Logout", Toast.LENGTH_SHORT).show();
@@ -158,32 +161,34 @@ public class MainActivity extends AppCompatActivity {
             myLoading_Dialog.setCanceledOnTouchOutside(false);
             myLoading_Dialog.show();
 
-            storeImgRef.child(myUser.getUid()).putFile(imgUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            String strDate= formatter.format(date);
+            storeImgRef.child(myUser.getUid()+strDate).putFile(imgUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     if (task.isSuccessful()){
-                        storeImgRef.child(myUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        storeImgRef.child(myUser.getUid()+strDate).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
 
-                                Date date = new Date();
-                                SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-                                String strDate= formatter.format(date);
 
                                 HashMap hashMap = new HashMap();
                                 hashMap.put("postDate",strDate);
                                 hashMap.put("postDescription",postDescription);
                                 hashMap.put("post_img_url",uri.toString());
                                 hashMap.put("user_profile_img",profileImgV);
+                                hashMap.put("fullName",fullNameV);
+                                hashMap.put("userName",userNameV);
 
-                                postRef.child(myUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                                postRef.child(myUser.getUid()+strDate).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
                                     public void onComplete(@NonNull Task task) {
                                         if (task.isSuccessful()){
                                             myLoading_Dialog.dismiss();
                                             Toast.makeText(MainActivity.this, "Post Added", Toast.LENGTH_SHORT).show();
                                             input_description.setText("");
-                                            upload_img.setImageURI(null);
+                                            upload_img.setImageResource(R.drawable.image_icon);
                                         }else {
                                             myLoading_Dialog.dismiss();
                                             Toast.makeText(MainActivity.this,"" + task.getException().toString(), Toast.LENGTH_SHORT).show();
@@ -232,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
                         profileImgV = snapshot.child("profileImage").getValue().toString();
                         Uri imgUri= Uri.parse(profileImgV);
                         fullNameV = snapshot.child("fullName").getValue().toString();
+                        userNameV = snapshot.child("username").getValue().toString();
 
                         Picasso.get().load(profileImgV).into(navHeaderImgV);
                         navHeaderUserName.setText(fullNameV);
