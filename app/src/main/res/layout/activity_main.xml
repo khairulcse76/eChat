@@ -5,26 +5,31 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:fitsSystemWindows="true"
     tools:context=".MainActivity"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    >
 
 
-    <include layout="@layout/main_app_bar" />
+    <include layout="@layout/main_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        tools:openDrawer="start"
         android:background="@color/colorgreen"
-        android:clickable="true"
         android:fitsSystemWindows="true"
-        android:visibility="visible"
-        app:headerLayout="@layout/nav_header_layout"
+        android:clickable="true"
         app:itemTextColor="@color/colorGray"
         app:menu="@menu/nav_item_menu">
 
+       <!-- inplement this header layout from mainActivity java
+       app:headerLayout="@layout/nav_header_layout"-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,6 +49,5 @@
 
     </com.google.android.material.navigation.NavigationView>
 
-    <include layout="@layout/content_main_home" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
