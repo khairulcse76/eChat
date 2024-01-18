@@ -6,15 +6,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_marginBottom="8dp"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -41,7 +42,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="User Name"
+                android:text="@string/user_name"
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
@@ -55,7 +56,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="0 hrs ago"
+                android:text="@string/_0_hrs_ago"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/PostHeaderUserName"
                 app:layout_constraintStart_toStartOf="@+id/PostHeaderUserName"
@@ -66,7 +67,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Post Description"
+                android:text="@string/post_description"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/postTimeView"
@@ -80,7 +81,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/post_image_view"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,9 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="TODO"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/like_icon"
                 app:layout_constraintStart_toStartOf="@+id/postImgView"
                 app:layout_constraintTop_toBottomOf="@+id/postImgView"
                 app:srcCompat="@drawable/like" />
@@ -108,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginStart="2dp"
-                android:text="10"
+                android:text="@string/_10"
                 app:layout_constraintBottom_toBottomOf="@+id/likeIcon"
                 app:layout_constraintStart_toEndOf="@+id/likeIcon"
                 app:layout_constraintTop_toTopOf="@+id/likeIcon" />
@@ -118,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/dislike_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/likeCount"
                 app:layout_constraintStart_toEndOf="@+id/likeCount"
                 app:layout_constraintTop_toTopOf="@+id/likeCount"
@@ -130,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginStart="2dp"
-                android:text="0"
+                android:text="@string/_0"
                 app:layout_constraintBottom_toBottomOf="@+id/dislikeIcon"
                 app:layout_constraintStart_toEndOf="@+id/dislikeIcon"
                 app:layout_constraintTop_toTopOf="@+id/dislikeIcon"
@@ -142,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/comment_icon"
                 app:layout_constraintEnd_toEndOf="@+id/postImgView"
                 app:layout_constraintTop_toBottomOf="@+id/postImgView"
                 app:srcCompat="@drawable/comment_3_line" />
@@ -152,12 +151,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginEnd="2dp"
-                android:text="5"
+                android:text="@string/_5"
                 app:layout_constraintBottom_toBottomOf="@+id/commentIcon"
                 app:layout_constraintEnd_toStartOf="@+id/commentIcon"
                 app:layout_constraintTop_toTopOf="@+id/commentIcon" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="@+id/commentIcon"
+                app:layout_constraintStart_toStartOf="@+id/likeIcon"
+                app:layout_constraintTop_toBottomOf="@+id/likeIcon" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewcmt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/commentIcon"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/likeIcon"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <EditText
+                android:id="@+id/InputTxtComment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/input_comment_bd"
+                android:ems="10"
+                android:hint="@string/enter_comment"
+                android:inputType="text|textMultiLine"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/recyclerViewcmt"
+                app:layout_constraintStart_toStartOf="@+id/recyclerViewcmt"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewcmt"
+                android:autofillHints="#000" />
+
+            <ImageView
+                android:id="@+id/cmtImgIcon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/InputTxtComment"
+                app:layout_constraintEnd_toEndOf="@+id/InputTxtComment"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewcmt"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/send_icon"
+                android:contentDescription="@string/comment_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

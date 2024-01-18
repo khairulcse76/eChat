@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     //Firebase Import
     FirebaseAuth myAuth;
     FirebaseUser myUser;
-    DatabaseReference dbRef, postRef;
+    DatabaseReference dbRef, postRef, likeRef, disLikeRef;
     StorageReference storeImgRef;
 
     String profileImgV,fullNameV, userNameV;
@@ -107,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
         postRef = FirebaseDatabase.getInstance().getReference().child("Posts");
         storeImgRef = FirebaseStorage.getInstance().getReference().child("PostImage");
+        //faching and store like and dislike db reference
+        likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
+        disLikeRef = FirebaseDatabase.getInstance().getReference().child("Dislikes");
 
         if (getSupportActionBar() !=null){
             getSupportActionBar().setTitle("Home");
@@ -179,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new FirebaseRecyclerAdapter<Post_Model, MyViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Post_Model model) {
+                final String postKey = getRef(position).getKey(); //post key for using likes and dislikes Table
                 holder.postDescriptionView.setText(model.getPostDescription());
                 holder.PostHeaderUserName.setText(model.getFullName());
                 //holder.postTimeView.setText(model.getPostDate());
@@ -187,7 +192,112 @@ public class MainActivity extends AppCompatActivity {
                 Picasso.get().load(model.getPost_img_url()).into(holder.postImgView);
                 Picasso.get().load(model.getUser_profile_img()).into(holder.post_profile_Image_view);
 
+
+                //like dislike button identifire
+                assert postKey != null;
+
+                disLikeRef.child(postKey).child(myUser.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            holder.dislikeIcon.setColorFilter(Color.RED);
+                        }else {
+                            holder.dislikeIcon.setColorFilter(Color.BLACK);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                //like or dislike count
+                holder.countLike(postKey,myUser.getUid(),likeRef);
+                holder.countDislike(postKey,myUser.getUid(),disLikeRef);
+
+//like and dislike button initialization
+                holder.likeIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        likeRef.child(postKey).child(myUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    likeRef.child(postKey).child(myUser.getUid()).removeValue();
+                                    holder.likeIcon.setColorFilter(Color.BLACK);
+                                    //notifyDataSetChanged();
+                                }else {
+                                    likeRef.child(postKey).child(myUser.getUid()).setValue("Like");
+                                    holder.likeIcon.setColorFilter(Color.BLUE);
+                                    //notifyDataSetChanged();
+                                    disLikeRef.child(postKey).child(myUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()){
+                                                disLikeRef.child(postKey).child(myUser.getUid()).removeValue();
+                                                holder.dislikeIcon.setColorFilter(Color.BLACK);
+                                               // notifyDataSetChanged();
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(MainActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                holder.dislikeIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        disLikeRef.child(postKey).child(myUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    disLikeRef.child(postKey).child(myUser.getUid()).removeValue();
+                                    holder.dislikeIcon.setColorFilter(Color.BLACK);
+                                    //notifyDataSetChanged();
+                                }else {
+                                    disLikeRef.child(postKey).child(myUser.getUid()).setValue("Dislike");
+                                    holder.dislikeIcon.setColorFilter(Color.BLUE);
+                                    //notifyDataSetChanged();
+                                    likeRef.child(postKey).child(myUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()){
+                                                likeRef.child(postKey).child(myUser.getUid()).removeValue();
+                                                holder.likeIcon.setColorFilter(Color.BLACK);
+                                                //notifyDataSetChanged();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(MainActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
             }
+
+
 
             @NonNull
             @Override

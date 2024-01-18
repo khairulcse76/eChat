@@ -26,7 +26,8 @@
         android:fitsSystemWindows="true"
         android:clickable="true"
         app:itemTextColor="@color/colorGray"
-        app:menu="@menu/nav_item_menu">
+        app:menu="@menu/nav_item_menu"
+        android:focusable="true">
 
        <!-- inplement this header layout from mainActivity java
        app:headerLayout="@layout/nav_header_layout"-->

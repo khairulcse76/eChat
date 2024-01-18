@@ -12,7 +12,7 @@
         android:id="@+id/textViewReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/login"
         android:textAlignment="center"
         android:textColor="@color/colorgreen"
         android:textSize="34sp"
@@ -32,18 +32,19 @@
         android:layout_marginEnd="32dp"
         android:background="@drawable/inpute_bg"
         android:ems="10"
-        android:hint="User or E-mail"
+        android:hint="@string/user_or_e_mail"
         android:inputType="text"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColorHint="@color/colorgreen"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewReg" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewReg"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/inputLoginPass"
@@ -52,7 +53,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/inpute_bg"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
@@ -63,7 +64,8 @@
         app:layout_constraintEnd_toEndOf="@+id/inputUserName"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/inputUserName"
-        app:layout_constraintTop_toBottomOf="@+id/inputUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/inputUserName"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -71,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:background="@drawable/button_bg"
-        android:text="Login"
+        android:text="@string/login"
         android:textColor="@color/colorgreen"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -84,7 +86,7 @@
         android:id="@+id/txtVForgotPass"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Forgot Password"
+        android:text="@string/forgot_password"
         android:textAlignment="viewEnd"
         android:textColor="@color/Red"
         android:textSize="16sp"
@@ -99,8 +101,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginRight="40dp"
-        android:gravity="right"
+        android:layout_marginEnd="40dp"
+        android:gravity="end"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +111,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Don't Have Account"
+            android:text="@string/don_t_have_account"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -118,8 +120,8 @@
             android:id="@+id/txtVSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Signup"
+            android:layout_marginStart="10dp"
+            android:text="@string/signup"
             android:textAlignment="center"
             android:textColor="@color/Red"
             android:textSize="16sp" />
