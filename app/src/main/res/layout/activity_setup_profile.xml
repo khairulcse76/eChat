@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".SetupProfileActivity">
 
-    <include
+    <!--<include
         android:id="@+id/include"
-        layout="@layout/main_app_bar" />
+        layout="@layout/main_app_bar" />-->
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

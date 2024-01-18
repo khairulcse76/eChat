@@ -75,7 +75,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0-alpha03")
     //firebase
 
-    implementation("com.google.firebase:firebase-database:20.3.0")
+    // implementation("com.google.firebase:firebase-database:20.3.0") //if use firebase-ui-database no need to use this dependency
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
@@ -84,10 +84,14 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
 
+    //for recyler view
+    implementation("com.firebaseui:firebase-ui-database:8.0.2")
+
     //image Circle view dependency
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     // image view over another image
     implementation("com.squareup.picasso:picasso:2.8")
+
 
 }

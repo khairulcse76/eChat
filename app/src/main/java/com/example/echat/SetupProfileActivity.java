@@ -53,14 +53,14 @@ public class SetupProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_profile);
 
-        toolbar = findViewById(R.id.include);
+        /*toolbar = findViewById(R.id.include);
         setSupportActionBar(toolbar);
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle("Setup Profile");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }else {
             Toast.makeText(this, "Action Bar Load Fail...!!", Toast.LENGTH_LONG).show();
-        }
+        }*/
 
         //Objects.requireNonNull(getSupportActionBar()).setTitle("Profile Setup");
 

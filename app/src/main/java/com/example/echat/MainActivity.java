@@ -7,21 +7,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.echat.ui.theme.Utills.Post_Model;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +43,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
     Uri  imgUri;
 
     ProgressDialog myLoading_Dialog;
+
+    //Recycler Adapter
+    FirebaseRecyclerAdapter<Post_Model,MyViewHolder> adapter;
+    FirebaseRecyclerOptions<Post_Model>options;
+
+    RecyclerView recylContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
         upload_img = findViewById(R.id.img_add_post);
         btn_upload_post = findViewById(R.id.upload_post);
         input_description = findViewById(R.id.edtCreatePost);
+
+
+        recylContainer = findViewById(R.id.recylContainer);
+
+        recylContainer.setLayoutManager(new LinearLayoutManager(this));
+
+
 
         myAuth = FirebaseAuth.getInstance();
         myUser = myAuth.getCurrentUser();
@@ -148,6 +171,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        LoadPosts();
+    }
+
+    private void LoadPosts() {
+        options = new FirebaseRecyclerOptions.Builder<Post_Model>().setQuery(postRef, Post_Model.class).build();
+        adapter = new FirebaseRecyclerAdapter<Post_Model, MyViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Post_Model model) {
+                holder.postDescriptionView.setText(model.getPostDescription());
+                holder.PostHeaderUserName.setText(model.getFullName());
+                //holder.postTimeView.setText(model.getPostDate());
+                String timeVAgo = calculateTimeAgo(model.getPostDate());
+                holder.postTimeView.setText(timeVAgo);
+                Picasso.get().load(model.getPost_img_url()).into(holder.postImgView);
+                Picasso.get().load(model.getUser_profile_img()).into(holder.post_profile_Image_view);
+
+            }
+
+            @NonNull
+            @Override
+            public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.single_post_view,parent,false);
+                return new MyViewHolder(view);
+            }
+        };
+        adapter.startListening();
+        recylContainer.setAdapter(adapter);
+    }
+
+    private String calculateTimeAgo(String postDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        try {
+            long time = sdf.parse(postDate).getTime();
+            long now = System.currentTimeMillis();
+            CharSequence ago =
+                    DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
+            return ago+"";
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void addPost() {
@@ -162,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             myLoading_Dialog.show();
 
             Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             String strDate= formatter.format(date);
             storeImgRef.child(myUser.getUid()+strDate).putFile(imgUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
