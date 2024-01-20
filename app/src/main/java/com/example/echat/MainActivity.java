@@ -25,13 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.echat.ui.theme.Utills.Post_Model;
+import com.example.echat.ui.theme.Utills.comment_model;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     //Firebase Import
     FirebaseAuth myAuth;
     FirebaseUser myUser;
-    DatabaseReference dbRef, postRef, likeRef, disLikeRef;
+    DatabaseReference dbRef, postRef, likeRef, disLikeRef, commentRef;
     StorageReference storeImgRef;
 
     String profileImgV,fullNameV, userNameV;
@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
     //Recycler Adapter
     FirebaseRecyclerAdapter<Post_Model,MyViewHolder> adapter;
     FirebaseRecyclerOptions<Post_Model>options;
+
+    // comment Adapter
+    FirebaseRecyclerAdapter<comment_model, MyCommentViewHolder>cmtAdapter;
+    FirebaseRecyclerOptions<comment_model>ctmOptions;
 
     RecyclerView recylContainer;
     @Override
@@ -112,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
         likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
         disLikeRef = FirebaseDatabase.getInstance().getReference().child("Dislikes");
 
+        // for comment add
+        commentRef = FirebaseDatabase.getInstance().getReference().child("Comments");
+
         if (getSupportActionBar() !=null){
             getSupportActionBar().setTitle("Home");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -122,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         View view = navigationView.inflateHeaderView(R.layout.nav_header_layout);
-        navHeaderImgV = view.findViewById(R.id.post_profile_Image_view);
+        navHeaderImgV = view.findViewById(R.id.single_cmtProImg);
         navHeaderUserName = view.findViewById(R.id.txtViewUser);
 
         btn_upload_post.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         LoadPosts();
+
+
     }
 
     private void LoadPosts() {
@@ -295,8 +304,21 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                holder.addcmtImgIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String comment = holder.inputTxtComment.getText().toString();
+                        if (comment.isEmpty()){
+                            holder.inputTxtComment.setError("??");
+                            Toast.makeText(MainActivity.this, "Please Enter Something...", Toast.LENGTH_SHORT).show();
+                        }else {
+                            addCommentToDB(postKey,holder,myUser.getUid(),commentRef, comment);
+                        }
+                    }
+                });
+                // comment view
+                LoadComment(postKey);
             }
-
 
 
             @NonNull
@@ -308,6 +330,52 @@ public class MainActivity extends AppCompatActivity {
         };
         adapter.startListening();
         recylContainer.setAdapter(adapter);
+    }
+
+    private void LoadComment(String postKey) {
+        MyViewHolder.recyclerViewCmt.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        ctmOptions = new FirebaseRecyclerOptions.Builder<comment_model>().setQuery(commentRef.child(postKey), comment_model.class).build();
+        cmtAdapter = new FirebaseRecyclerAdapter<comment_model, MyCommentViewHolder>(ctmOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyCommentViewHolder holder, int position, @NonNull comment_model model) {
+                Picasso.get().load(model.getSingle_cmtProImg()).into(holder.profileImg);
+                holder.userName.setText(model.getSingle_cmtUserName());
+                holder.cmtView.setText(model.getSingle_cmtView());
+
+            }
+
+            @NonNull
+            @Override
+            public MyCommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_comment_view,parent,false);
+                return new MyCommentViewHolder(view);
+            }
+        };
+        cmtAdapter.startListening();
+        MyViewHolder.recyclerViewCmt.setAdapter(cmtAdapter);
+
+    }
+
+    private void addCommentToDB(String postKey, MyViewHolder holder, String uid, DatabaseReference commentRef, String comment) {
+        String commentKey = commentRef.child(postKey).push().getKey();
+        HashMap hashMap=new HashMap<>();
+        hashMap.put("userName",fullNameV);
+        hashMap.put("profileImgUrl",profileImgV);
+        hashMap.put("comment",comment);
+
+
+        commentRef.child(postKey).child(commentKey).child(uid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Comment added", Toast.LENGTH_SHORT).show();
+                    adapter.notifyDataSetChanged();
+                    holder.inputTxtComment.setText("");
+                }else {
+                    Toast.makeText(MainActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private String calculateTimeAgo(String postDate) {

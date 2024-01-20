@@ -3,9 +3,9 @@ package com.example.echat;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +20,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyViewHolder extends RecyclerView.ViewHolder {
     CircleImageView post_profile_Image_view;
     TextView PostHeaderUserName,postTimeView,postDescriptionView,likeCount,dislikeCount,commentCount;
-    ImageView postImgView,likeIcon,dislikeIcon,commentIcon;
+    ImageView postImgView,likeIcon,dislikeIcon,commentIcon, addcmtImgIcon;
+    EditText inputTxtComment;
+    static RecyclerView recyclerViewCmt;
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        post_profile_Image_view =itemView.findViewById(R.id.post_profile_Image_view);
+        post_profile_Image_view =itemView.findViewById(R.id.single_cmtProImg);
         PostHeaderUserName =itemView.findViewById(R.id.PostHeaderUserName);
         postTimeView =itemView.findViewById(R.id.postTimeView);
         postDescriptionView =itemView.findViewById(R.id.postDescriptionView);
@@ -35,7 +37,9 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         likeIcon =itemView.findViewById(R.id.likeIcon);
         dislikeIcon =itemView.findViewById(R.id.dislikeIcon);
         commentIcon =itemView.findViewById(R.id.commentIcon);
-
+        addcmtImgIcon =itemView.findViewById(R.id.cmtImgIcon);
+        inputTxtComment =itemView.findViewById(R.id.InputTxtComment);
+        recyclerViewCmt =itemView.findViewById(R.id.recyclerViewcmt);
     }
 
     public void countLike(String postKey, String uid, DatabaseReference likeRef) {

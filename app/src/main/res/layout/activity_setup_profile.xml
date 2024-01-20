@@ -27,7 +27,7 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/post_profile_Image_view"
+                android:id="@+id/single_cmtProImg"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_marginTop="24dp"
@@ -56,7 +56,7 @@
                 android:textColorHint="@color/colorGray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_profile_Image_view"
+                app:layout_constraintTop_toBottomOf="@+id/single_cmtProImg"
                 android:autofillHints="" />
 
             <EditText
