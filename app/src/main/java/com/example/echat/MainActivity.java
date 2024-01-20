@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         View view = navigationView.inflateHeaderView(R.layout.nav_header_layout);
-        navHeaderImgV = view.findViewById(R.id.single_cmtProImg);
+        navHeaderImgV = view.findViewById(R.id.UpdateprofileImgView);
         navHeaderUserName = view.findViewById(R.id.txtViewUser);
 
         btn_upload_post.setOnClickListener(new View.OnClickListener() {
@@ -155,11 +157,15 @@ public class MainActivity extends AppCompatActivity {
         drToggle.syncState();
 
 
+        //Fragment Manager
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.nav_home){
+                    Intent intent  = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
                     Toast.makeText(MainActivity.this, "Click to home", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_Chat) {
                     Toast.makeText(MainActivity.this, "Click to Chat", Toast.LENGTH_SHORT).show();
@@ -168,9 +174,9 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id==R.id.nav_find_friend) {
                     Toast.makeText(MainActivity.this, "Click to Find Friend", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_profile) {
-                    Intent intent  = new Intent(MainActivity.this,SetupProfileActivity.class);
-                    startActivity(intent);
-
+                    Intent intent  = new Intent(MainActivity.this,Profile_Activity.class);
+                    startActivity(intent);/*
+                    LoadFragment(new ProfileFragment());*/
                     Toast.makeText(MainActivity.this, "Click to Profile", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_logout) {
                     Toast.makeText(MainActivity.this, "Click to Logout", Toast.LENGTH_SHORT).show();
@@ -185,6 +191,13 @@ public class MainActivity extends AppCompatActivity {
         LoadPosts();
 
 
+    }
+
+    private void LoadFragment(ProfileFragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.frContainer, fragment);
+        ft.commit();
     }
 
     private void LoadPosts() {
@@ -224,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 //like or dislike count
                 holder.countLike(postKey,myUser.getUid(),likeRef);
                 holder.countDislike(postKey,myUser.getUid(),disLikeRef);
+                holder.commentCount(postKey,myUser.getUid(),commentRef);
 
 //like and dislike button initialization
                 holder.likeIcon.setOnClickListener(new View.OnClickListener() {
@@ -338,9 +352,9 @@ public class MainActivity extends AppCompatActivity {
         cmtAdapter = new FirebaseRecyclerAdapter<comment_model, MyCommentViewHolder>(ctmOptions) {
             @Override
             protected void onBindViewHolder(@NonNull MyCommentViewHolder holder, int position, @NonNull comment_model model) {
-                Picasso.get().load(model.getSingle_cmtProImg()).into(holder.profileImg);
-                holder.userName.setText(model.getSingle_cmtUserName());
-                holder.cmtView.setText(model.getSingle_cmtView());
+                Picasso.get().load(model.getProfileImgUrl()).into(holder.profileImg);
+                holder.userName.setText(model.getUserName());
+                holder.cmtView.setText(model.getComment());
 
             }
 
@@ -351,25 +365,25 @@ public class MainActivity extends AppCompatActivity {
                 return new MyCommentViewHolder(view);
             }
         };
-        cmtAdapter.startListening();
         MyViewHolder.recyclerViewCmt.setAdapter(cmtAdapter);
-
+        cmtAdapter.startListening();
     }
 
     private void addCommentToDB(String postKey, MyViewHolder holder, String uid, DatabaseReference commentRef, String comment) {
         String commentKey = commentRef.child(postKey).push().getKey();
-        HashMap hashMap=new HashMap<>();
+        HashMap<String, Object> hashMap=new HashMap<>();
         hashMap.put("userName",fullNameV);
         hashMap.put("profileImgUrl",profileImgV);
         hashMap.put("comment",comment);
 
 
-        commentRef.child(postKey).child(commentKey).child(uid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+        assert commentKey != null;
+        commentRef.child(postKey).child(commentKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 if (task.isSuccessful()){
                     Toast.makeText(MainActivity.this, "Comment added", Toast.LENGTH_SHORT).show();
-                    adapter.notifyDataSetChanged();
+                    cmtAdapter.notifyDataSetChanged();
                     holder.inputTxtComment.setText("");
                 }else {
                     Toast.makeText(MainActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
@@ -414,8 +428,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
 
-
-                                HashMap hashMap = new HashMap();
+                                HashMap<String,Object> hashMap = new HashMap<>();
                                 hashMap.put("postDate",strDate);
                                 hashMap.put("postDescription",postDescription);
                                 hashMap.put("post_img_url",uri.toString());
@@ -423,9 +436,9 @@ public class MainActivity extends AppCompatActivity {
                                 hashMap.put("fullName",fullNameV);
                                 hashMap.put("userName",userNameV);
 
-                                postRef.child(myUser.getUid()+strDate).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                                postRef.child(myUser.getUid()+strDate).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
-                                    public void onComplete(@NonNull Task task) {
+                                    public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()){
                                             myLoading_Dialog.dismiss();
                                             Toast.makeText(MainActivity.this, "Post Added", Toast.LENGTH_SHORT).show();

@@ -43,7 +43,7 @@ public class splash extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
-                                startActivity(iMain);
+                                startActivity(iMain);finish();
                             }else {
                                 startActivity(iSetupProfile);
                                 finish();
@@ -61,6 +61,6 @@ public class splash extends AppCompatActivity {
                 }
 
             }
-        }, 3000);
+        }, 2000);
     }
 }

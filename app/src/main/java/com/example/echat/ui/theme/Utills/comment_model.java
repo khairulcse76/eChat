@@ -2,38 +2,38 @@ package com.example.echat.ui.theme.Utills;
 
 
 public class comment_model {
-    private String single_cmtProImg, single_cmtUserName,single_cmtView;
+    private String comment, profileImgUrl,userName;
 
     public comment_model() {
     }
 
-    public comment_model(String single_cmtProImg, String single_cmtUserName, String single_cmtView) {
-        this.single_cmtProImg = single_cmtProImg;
-        this.single_cmtUserName = single_cmtUserName;
-        this.single_cmtView = single_cmtView;
+    public comment_model(String comment, String profileImgUrl, String userName) {
+        this.comment = comment;
+        this.profileImgUrl = profileImgUrl;
+        this.userName = userName;
     }
 
-    public String getSingle_cmtProImg() {
-        return single_cmtProImg;
+    public String getComment() {
+        return comment;
     }
 
-    public void setSingle_cmtProImg(String single_cmtProImg) {
-        this.single_cmtProImg = single_cmtProImg;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public String getSingle_cmtUserName() {
-        return single_cmtUserName;
+    public String getProfileImgUrl() {
+        return profileImgUrl;
     }
 
-    public void setSingle_cmtUserName(String single_cmtUserName) {
-        this.single_cmtUserName = single_cmtUserName;
+    public void setProfileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
     }
 
-    public String getSingle_cmtView() {
-        return single_cmtView;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setSingle_cmtView(String single_cmtView) {
-        this.single_cmtView = single_cmtView;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

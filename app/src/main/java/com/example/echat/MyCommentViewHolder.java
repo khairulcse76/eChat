@@ -1,7 +1,6 @@
 package com.example.echat;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,7 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder {
     TextView userName,cmtView;
     public MyCommentViewHolder(@NonNull View itemView) {
         super(itemView);
-        profileImg =  itemView.findViewById(R.id.single_cmtProImg);
+        profileImg =  itemView.findViewById(R.id.UpdateprofileImgView);
         userName =  itemView.findViewById(R.id.single_cmtUserName);
         cmtView =  itemView.findViewById(R.id.single_cmtView);
 

@@ -27,7 +27,7 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/single_cmtProImg"
+                android:id="@+id/UpdateprofileImgView"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_marginTop="24dp"
@@ -56,7 +56,7 @@
                 android:textColorHint="@color/colorGray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/single_cmtProImg"
+                app:layout_constraintTop_toBottomOf="@+id/UpdateprofileImgView"
                 android:autofillHints="" />
 
             <EditText
@@ -113,7 +113,7 @@
                 android:autofillHints="" />
 
             <EditText
-                android:id="@+id/inputCity"
+                android:id="@+id/inputCityUpd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -131,7 +131,7 @@
                 android:autofillHints="" />
 
             <EditText
-                android:id="@+id/inputCountry"
+                android:id="@+id/inputCountryUpd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -142,9 +142,9 @@
                 android:padding="10dp"
                 android:paddingStart="20dp"
                 android:textColorHint="@color/colorGray"
-                app:layout_constraintEnd_toEndOf="@+id/inputCity"
-                app:layout_constraintStart_toStartOf="@+id/inputCity"
-                app:layout_constraintTop_toBottomOf="@+id/inputCity"
+                app:layout_constraintEnd_toEndOf="@+id/inputCityUpd"
+                app:layout_constraintStart_toStartOf="@+id/inputCityUpd"
+                app:layout_constraintTop_toBottomOf="@+id/inputCityUpd"
                 android:autofillHints="" />
 
             <Button
@@ -156,9 +156,9 @@
                 android:text="@string/save"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/inputCountry"
-                app:layout_constraintStart_toStartOf="@+id/inputCountry"
-                app:layout_constraintTop_toBottomOf="@+id/inputCountry" />
+                app:layout_constraintEnd_toEndOf="@+id/inputCountryUpd"
+                app:layout_constraintStart_toStartOf="@+id/inputCountryUpd"
+                app:layout_constraintTop_toBottomOf="@+id/inputCountryUpd" />
 
             <TextView
                 android:id="@+id/txtSkip"

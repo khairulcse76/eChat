@@ -64,13 +64,13 @@ public class SetupProfileActivity extends AppCompatActivity {
 
         //Objects.requireNonNull(getSupportActionBar()).setTitle("Profile Setup");
 
-        profile_img         = findViewById(R.id.single_cmtProImg);
+        profile_img         = findViewById(R.id.UpdateprofileImgView);
         inputName           = findViewById(R.id.inputName);
         inputUserName       = findViewById(R.id.inpUserName);
         inputPhoneNumber    = findViewById(R.id.inputphoneNumber);
         inputProfession     = findViewById(R.id.inputProfession);
-        inputCity           = findViewById(R.id.inputCity);
-        inputCountry        = findViewById(R.id.inputCountry);
+        inputCity           = findViewById(R.id.inputCityUpd);
+        inputCountry        = findViewById(R.id.inputCountryUpd);
         txtSkip             = findViewById(R.id.txtSkip);
         btnSave             = findViewById(R.id.btnsave);
 

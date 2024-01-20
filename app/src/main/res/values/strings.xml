@@ -38,4 +38,6 @@
     <string name="upload_photos">Upload Photos</string>
     <string name="content_post">content Post</string>
     <string name="e_chat_app_name">e-Chat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

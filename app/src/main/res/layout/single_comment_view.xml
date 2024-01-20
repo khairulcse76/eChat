@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/single_cmtProImg"
+        android:id="@+id/UpdateprofileImgView"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
@@ -28,10 +28,11 @@
         android:text="@string/user_name"
         android:textColor="@color/colorPrimary"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/single_cmtProImg"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/UpdateprofileImgView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/single_cmtProImg"
-        app:layout_constraintTop_toTopOf="@+id/single_cmtProImg"
+        app:layout_constraintStart_toEndOf="@+id/UpdateprofileImgView"
+        app:layout_constraintTop_toTopOf="@+id/UpdateprofileImgView"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -40,7 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="this is comment"
-        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/single_cmtUserName"
         app:layout_constraintStart_toStartOf="@+id/single_cmtUserName"
         app:layout_constraintTop_toBottomOf="@+id/single_cmtUserName" />
