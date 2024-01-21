@@ -172,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
                 }else if (id==R.id.nav_friend){
                     Toast.makeText(MainActivity.this, "Click to Friend", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_find_friend) {
-                    Toast.makeText(MainActivity.this, "Click to Find Friend", Toast.LENGTH_SHORT).show();
+                    Intent intent  = new Intent(MainActivity.this,Find_Friend_Activity.class);
+                    startActivity(intent);
                 } else if (id==R.id.nav_profile) {
                     Intent intent  = new Intent(MainActivity.this,Profile_Activity.class);
                     startActivity(intent);/*
@@ -189,8 +190,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         LoadPosts();
-
-
     }
 
     private void LoadFragment(ProfileFragment fragment) {
@@ -239,6 +238,17 @@ public class MainActivity extends AppCompatActivity {
                 holder.countDislike(postKey,myUser.getUid(),disLikeRef);
                 holder.commentCount(postKey,myUser.getUid(),commentRef);
 
+                /*holder.commentIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (MyViewHolder.recyclerViewCmt.getVisibility()==View.VISIBLE){
+                            MyViewHolder.recyclerViewCmt.setVisibility(View.GONE);
+                        }else {
+                            MyViewHolder.recyclerViewCmt.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    //LoadComment(postKey);
+                });*/
 //like and dislike button initialization
                 holder.likeIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -488,7 +498,29 @@ public class MainActivity extends AppCompatActivity {
             dbRef.child(myUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()){
+                    if (snapshot.exists()) {
+                        // Check if "profileImage" exists and is not null
+                        if (snapshot.child("profileImage").exists() && snapshot.child("profileImage").getValue() != null) {
+                            profileImgV = snapshot.child("profileImage").getValue().toString();
+                            Uri imgUri = Uri.parse(profileImgV);
+                            Picasso.get().load(profileImgV).into(navHeaderImgV);
+                            // navHeaderImgV.setImageURI(Uri.parse(profileImgV));
+                        }
+
+                        // Check if "fullName" exists and is not null
+                        if (snapshot.child("fullName").exists() && snapshot.child("fullName").getValue() != null) {
+                            fullNameV = snapshot.child("fullName").getValue().toString();
+                            navHeaderUserName.setText(fullNameV);
+                        }
+
+                        // Check if "username" exists and is not null
+                        if (snapshot.child("username").exists() && snapshot.child("username").getValue() != null) {
+                            userNameV = snapshot.child("username").getValue().toString();
+                        }
+                    }
+
+
+                    /*if (snapshot.exists()){
                         profileImgV = snapshot.child("profileImage").getValue().toString();
                         Uri imgUri= Uri.parse(profileImgV);
                         fullNameV = snapshot.child("fullName").getValue().toString();
@@ -497,7 +529,7 @@ public class MainActivity extends AppCompatActivity {
                         Picasso.get().load(profileImgV).into(navHeaderImgV);
                         navHeaderUserName.setText(fullNameV);
                         //navHeaderImgV.setImageURI(Uri.parse(profileImgV));
-                    }
+                    }*/
                 }
 
                 @Override
