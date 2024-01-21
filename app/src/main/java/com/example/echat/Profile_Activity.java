@@ -162,6 +162,7 @@ public class Profile_Activity extends AppCompatActivity {
                             updates.put("fullName",fullname);
                             updates.put("country",country);
                             updates.put("city",city);
+                            updates.put("status","Offline");
                             updates.put("phoneNumber",number);
                             updates.put("profession",profession);
                            updates.put("profileImage",profileimg);

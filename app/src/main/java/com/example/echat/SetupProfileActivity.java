@@ -146,6 +146,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                                 hashMap.put("profession",profession);
                                 hashMap.put("city", city);
                                 hashMap.put("country",country);
+                                hashMap.put("status","Offline");
                                 hashMap.put("profileImage",uri.toString());
                                 dbRef.child(mUser.getUid()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener() {
                                     @Override
