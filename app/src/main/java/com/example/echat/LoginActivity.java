@@ -17,10 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Objects;
-
 public class LoginActivity extends AppCompatActivity {
-    TextView txtViewReg , txtVForgotPass, txtVSignup;
+    TextView txtViewReg , txtVForgotPass, txtVSignup, txtVMsg;
     EditText inputUserName,inputLoginPass;
     Button btnLogin;
     FirebaseAuth mAuth;
@@ -37,10 +35,12 @@ public class LoginActivity extends AppCompatActivity {
         inputUserName= findViewById(R.id.inputUserName);
         inputLoginPass=findViewById(R.id.inputLoginPass);
         btnLogin=findViewById(R.id.btnLogin);
-
+        txtVMsg=findViewById(R.id.txtVMsg);
+        String forgotmsg= getIntent().getStringExtra("checkMail");
         mAuth = FirebaseAuth.getInstance();
         mProgressBar = new ProgressDialog(this);
 
+        txtVMsg.setText(forgotmsg);
         txtVForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AtemptLogin();
+                AttemptLogin();
             }
         });
 
@@ -62,10 +62,17 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(iRegistration);
             }
         });
+        txtVForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iForgot = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(iForgot);
+            }
+        });
 
     }
 
-    private void AtemptLogin() {
+    private void AttemptLogin() {
 
         String email = inputUserName.getText().toString();
         String password = inputLoginPass.getText().toString();

@@ -180,7 +180,10 @@ public class MainActivity extends AppCompatActivity {
                     LoadFragment(new ProfileFragment());*/
                     Toast.makeText(MainActivity.this, "Click to Profile", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_logout) {
-                    Toast.makeText(MainActivity.this, "Click to Logout", Toast.LENGTH_SHORT).show();
+                    myAuth.signOut();
+                    Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 }else {
                     Toast.makeText(MainActivity.this, "dont work", Toast.LENGTH_SHORT).show();
                 }

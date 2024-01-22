@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -73,6 +74,15 @@ public class Find_Friend_Activity extends AppCompatActivity {
                     holder.itemView.setVisibility(View.GONE);
                     holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
                 }
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(Find_Friend_Activity.this, ViewFriendActivity.class);
+                        intent.putExtra("userKey",getRef(position).getKey().toString());
+                        startActivity(intent);
+                    }
+                });
             }
 
             @NonNull
