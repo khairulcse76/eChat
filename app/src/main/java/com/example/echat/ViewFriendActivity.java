@@ -1,12 +1,18 @@
 package com.example.echat;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -23,12 +31,14 @@ public class ViewFriendActivity extends AppCompatActivity {
 
     FirebaseAuth myAuth;
     FirebaseUser myUser;
-    DatabaseReference userRef;
+    DatabaseReference userRef, requestRef, friendRef;
 
     String ProfileImgUrl, username,fullName,city,country;
 
     CircleImageView profileImg;
     TextView UserName,inputFullName,address;
+    Button btnSendRequ,btnDeclineRequ;
+    String CurrentState = "nothing_happen";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,17 +47,106 @@ public class ViewFriendActivity extends AppCompatActivity {
         UserName = findViewById(R.id.userFullName);
         address = findViewById(R.id.address);
         profileImg = findViewById(R.id.FVProfileImg);
+        btnDeclineRequ = findViewById(R.id.btnDeclineRequ);
+        btnSendRequ = findViewById(R.id.btnSendRequ);
 
         String userID = getIntent().getStringExtra("userKey");
+
         Toast.makeText(this, userID, Toast.LENGTH_SHORT).show();
 
         myAuth=FirebaseAuth.getInstance();
         myUser=myAuth.getCurrentUser();
         assert userID != null;
         userRef= FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
+        requestRef= FirebaseDatabase.getInstance().getReference().child("Requests");
+        friendRef= FirebaseDatabase.getInstance().getReference().child("Friends");
 
         LoadUsers();
 
+        btnSendRequ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PerformAction(userID);
+            }
+        });// btn send Request Close
+    } // on Create Close
+
+    private void PerformAction(String userID) {
+        if (CurrentState.equals("nothing_happen")){
+            HashMap hashMap=new HashMap<>();
+            hashMap.put("status","pending");
+            requestRef.child(myUser.getUid()).child(userID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if (task.isSuccessful()){
+                        btnSendRequ.setText("Cancel Friend Request");
+                        btnSendRequ.setBackgroundColor(Color.MAGENTA);
+                        CurrentState = "I_Request_sent_pending";
+
+                        Toast.makeText(ViewFriendActivity.this, "Request Send", Toast.LENGTH_SHORT).show();
+                        btnDeclineRequ.setVisibility(View.GONE);
+                    }else {
+                        Toast.makeText(ViewFriendActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }//if nothing_happen Close
+        if (CurrentState.equals("I_Request_sent_pending") || CurrentState.equals("I_Request_sent_decline")){
+            requestRef.child(myUser.getUid()).child(userID).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        Toast.makeText(ViewFriendActivity.this, "You Have Canceled Friend Request", Toast.LENGTH_LONG).show();
+                        CurrentState = "nothing_happen";
+                        btnSendRequ.setText("Send Friend Request");
+                        btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
+                        btnDeclineRequ.setVisibility(View.GONE);
+                    }else {
+                        Toast.makeText(ViewFriendActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }//Request_sent_pending condition Close
+
+        if (CurrentState.equals("He_Request_sent_pending")){
+            requestRef.child(myUser.getUid()).child(userID).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        HashMap hashMap=new HashMap<>();
+                        hashMap.put("status","Friend");
+                        hashMap.put("username", username);
+                        hashMap.put("fullName", fullName);
+                        hashMap.put("ProfileImgUrl", ProfileImgUrl);
+
+                        friendRef.child(userID).child(myUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()){
+                                    CurrentState="Friend";
+                                    Toast.makeText(ViewFriendActivity.this, "Friend Request Accepted", Toast.LENGTH_SHORT).show();
+                                    btnSendRequ.setText("Send SMS");
+                                    btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
+
+                                    btnDeclineRequ.setText("Unfriend");
+                                    btnDeclineRequ.setBackgroundColor(getColor(R.color.Red));
+
+                                    btnDeclineRequ.setVisibility(View.VISIBLE);
+                                }else {
+                                    Toast.makeText(ViewFriendActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    }else {
+                        Toast.makeText(ViewFriendActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }// He_Request_sent_pending Close
+        if (CurrentState.equals("Friend")){
+            Toast.makeText(this, "Your are Those Friend....", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void LoadUsers() {
@@ -85,5 +184,5 @@ public class ViewFriendActivity extends AppCompatActivity {
                 Toast.makeText(ViewFriendActivity.this, error.getMessage()+"", Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }//load user Close
 }
