@@ -50,7 +50,6 @@ public class Find_Friend_Activity extends AppCompatActivity {
         myUsers=myAuth.getCurrentUser();
         userRef= FirebaseDatabase.getInstance().getReference().child("Users");
         LoadUsers("");
-
     }
 
     private void LoadUsers(String s) {
@@ -59,7 +58,7 @@ public class Find_Friend_Activity extends AppCompatActivity {
         adapter=new FirebaseRecyclerAdapter<users_model, MyFriendViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyFriendViewHolder holder, int position, @NonNull users_model model) {
-                
+
             }
 
             @NonNull
