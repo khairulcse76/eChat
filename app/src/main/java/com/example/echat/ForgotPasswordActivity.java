@@ -20,6 +20,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     EditText inputEmail;
     Button btnForgot;
     TextView confirmMsg;
+    String btnState="0";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +44,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 confirmMsg.setText("Please Check your email for Password reset link \n"+" Click for Login");
                                 inputEmail.setText("");
+                                btnState="1";
                             }else {
                                 confirmMsg.setText("Email Not send");
                                 confirmMsg.setTextColor(Color.RED);
@@ -56,7 +58,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-                intent.putExtra("checkMail","if you send password reset link, please check email for reset password...");
+                    if (btnState.equals("1")){
+                        intent.putExtra("checkMail","Please check your email for reset password...");
+                    }
+
                 startActivity(intent);
             }
         });

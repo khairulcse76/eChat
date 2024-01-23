@@ -69,7 +69,93 @@ public class ViewFriendActivity extends AppCompatActivity {
                 PerformAction(userID);
             }
         });// btn send Request Close
+        checkUserExistence(userID);
     } // on Create Close
+
+    private void checkUserExistence(String userID) {
+        friendRef.child(myUser.getUid()).child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    CurrentState="Friend";
+                    btnSendRequ.setText("Send SMS");
+                    btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
+                    btnDeclineRequ.setText("Unfriend");
+                    btnDeclineRequ.setBackgroundColor(getColor(R.color.Red));
+                    btnDeclineRequ.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ViewFriendActivity.this, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        friendRef.child(userID).child(myUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    CurrentState="Friend";
+                    btnSendRequ.setText("Send SMS");
+                    btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
+                    btnDeclineRequ.setText("Unfriend");
+                    btnDeclineRequ.setBackgroundColor(getColor(R.color.Red));
+                    btnDeclineRequ.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        requestRef.child(myUser.getUid()).child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    if (snapshot.child("status").getValue().toString().equals("pending")){
+                        CurrentState = "I_Request_sent_pending";
+                        btnSendRequ.setText("Cancel Friend Request");
+                        btnSendRequ.setBackgroundColor(Color.MAGENTA);
+                        btnDeclineRequ.setVisibility(View.GONE);
+                    }
+                    if (snapshot.child("status").getValue().toString().equals("decline")){
+                        CurrentState = "I_Request_sent_decline";
+                        btnSendRequ.setText("Cancel Friend Request");
+                        btnSendRequ.setBackgroundColor(Color.MAGENTA);
+                        btnDeclineRequ.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ViewFriendActivity.this, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            }
+        }); //request Ref close
+        requestRef.child(userID).child(myUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    if (snapshot.child("status").getValue().toString().equals("pending")){
+                        CurrentState="He_Request_sent_pending";
+                        btnSendRequ.setText("Accept Friend Request");
+                        btnDeclineRequ.setText("Decline Friend Request");
+                        btnDeclineRequ.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        if (CurrentState.equals("nothing_happen")){
+            btnDeclineRequ.setVisibility(View.GONE);
+            btnSendRequ.setText("Send Friend Request");
+        }
+    }
 
     private void PerformAction(String userID) {
         if (CurrentState.equals("nothing_happen")){
@@ -82,9 +168,9 @@ public class ViewFriendActivity extends AppCompatActivity {
                         btnSendRequ.setText("Cancel Friend Request");
                         btnSendRequ.setBackgroundColor(Color.MAGENTA);
                         CurrentState = "I_Request_sent_pending";
-
-                        Toast.makeText(ViewFriendActivity.this, "Request Send", Toast.LENGTH_SHORT).show();
                         btnDeclineRequ.setVisibility(View.GONE);
+                        Toast.makeText(ViewFriendActivity.this, "Request Send", Toast.LENGTH_SHORT).show();
+
                     }else {
                         Toast.makeText(ViewFriendActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
                     }
