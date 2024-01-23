@@ -78,7 +78,7 @@ public class Find_Friend_Activity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent=new Intent(Find_Friend_Activity.this, ViewFriendActivity.class);
-                        intent.putExtra("userKey",getRef(position).getKey().toString());
+                        intent.putExtra("userKey",getRef(holder.getAdapterPosition()).getKey().toString()); //getRef(position).getKey().toString()
                         startActivity(intent);
                     }
                 });
@@ -94,7 +94,6 @@ public class Find_Friend_Activity extends AppCompatActivity {
         adapter.startListening();
         recyclerView.setAdapter(adapter);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
