@@ -1,6 +1,5 @@
 package com.example.echat;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,6 +38,14 @@ public class ViewFriendActivity extends AppCompatActivity {
     TextView UserName,inputFullName,address;
     Button btnSendRequ,btnDeclineRequ;
     String CurrentState = "nothing_happen";
+    String CurrentState_Friend="Friend";
+    String CurrentState_pending="Pending";
+    String CurrentState_decline="Decline";
+    String CurrentState_Unfriend="Unfriend";
+    String He_Request_sent_pending="He_Request_sent_pending";
+    String He_Request_sent_decline="He_Request_sent_pending";
+    String I_Request_sent_pending="I_Request_sent_pending";
+    String I_Request_sent_decline="I_Request_sent_decline";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,14 +77,58 @@ public class ViewFriendActivity extends AppCompatActivity {
             }
         });// btn send Request Close
         checkUserExistence(userID);
+        btnDeclineRequ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UnfriendPerform(userID);
+            }
+        });
     } // on Create Close
+
+    private void UnfriendPerform(String userID) {
+        if (CurrentState.equals(CurrentState_Friend)){
+            friendRef.child(myUser.getUid()).child(userID).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        friendRef.child(userID).child(myUser.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(ViewFriendActivity.this, "you are unfriend..", Toast.LENGTH_SHORT).show();
+                                    CurrentState="nothing_happen";
+                                    btnSendRequ.setText("Send Friend Request");
+                                    btnDeclineRequ.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }//friend current state close
+        if (CurrentState.equals(He_Request_sent_pending)){
+            HashMap hashMap=new HashMap();
+            hashMap.put("status","decline");
+
+            requestRef.child(userID).child(myUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if (task.isSuccessful()){
+                        CurrentState = He_Request_sent_decline;
+                        btnDeclineRequ.setVisibility(View.GONE);
+                        btnSendRequ.setText("Send Friend Request");
+                    }
+                }
+            });
+        }
+    }
 
     private void checkUserExistence(String userID) {
         friendRef.child(myUser.getUid()).child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
-                    CurrentState="Friend";
+                    CurrentState=CurrentState_Friend;
                     btnSendRequ.setText("Send SMS");
                     btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
                     btnDeclineRequ.setText("Unfriend");
@@ -95,7 +146,7 @@ public class ViewFriendActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
-                    CurrentState="Friend";
+                    CurrentState=CurrentState_Friend;
                     btnSendRequ.setText("Send SMS");
                     btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
                     btnDeclineRequ.setText("Unfriend");
@@ -113,14 +164,14 @@ public class ViewFriendActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
-                    if (snapshot.child("status").getValue().toString().equals("pending")){
-                        CurrentState = "I_Request_sent_pending";
+                    if (snapshot.child("status").getValue().toString().equals(CurrentState_pending)){
+                        CurrentState = I_Request_sent_pending;
                         btnSendRequ.setText("Cancel Friend Request");
                         btnSendRequ.setBackgroundColor(Color.MAGENTA);
                         btnDeclineRequ.setVisibility(View.GONE);
                     }
-                    if (snapshot.child("status").getValue().toString().equals("decline")){
-                        CurrentState = "I_Request_sent_decline";
+                    if (snapshot.child("status").getValue().toString().equals(CurrentState_decline)){
+                        CurrentState = I_Request_sent_decline;
                         btnSendRequ.setText("Cancel Friend Request");
                         btnSendRequ.setBackgroundColor(Color.MAGENTA);
                         btnDeclineRequ.setVisibility(View.GONE);
@@ -137,8 +188,8 @@ public class ViewFriendActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
-                    if (snapshot.child("status").getValue().toString().equals("pending")){
-                        CurrentState="He_Request_sent_pending";
+                    if (snapshot.child("status").getValue().toString().equals(CurrentState_pending)){
+                        CurrentState=He_Request_sent_pending;
                         btnSendRequ.setText("Accept Friend Request");
                         btnDeclineRequ.setText("Decline Friend Request");
                         btnDeclineRequ.setVisibility(View.VISIBLE);
@@ -160,14 +211,14 @@ public class ViewFriendActivity extends AppCompatActivity {
     private void PerformAction(String userID) {
         if (CurrentState.equals("nothing_happen")){
             HashMap hashMap=new HashMap<>();
-            hashMap.put("status","pending");
+            hashMap.put("status",CurrentState_pending);
             requestRef.child(myUser.getUid()).child(userID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful()){
                         btnSendRequ.setText("Cancel Friend Request");
                         btnSendRequ.setBackgroundColor(Color.MAGENTA);
-                        CurrentState = "I_Request_sent_pending";
+                        CurrentState = I_Request_sent_pending;
                         btnDeclineRequ.setVisibility(View.GONE);
                         Toast.makeText(ViewFriendActivity.this, "Request Send", Toast.LENGTH_SHORT).show();
 
@@ -177,7 +228,7 @@ public class ViewFriendActivity extends AppCompatActivity {
                 }
             });
         }//if nothing_happen Close
-        if (CurrentState.equals("I_Request_sent_pending") || CurrentState.equals("I_Request_sent_decline")){
+        if (CurrentState.equals(I_Request_sent_pending) || CurrentState.equals(I_Request_sent_decline)){
             requestRef.child(myUser.getUid()).child(userID).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -194,31 +245,38 @@ public class ViewFriendActivity extends AppCompatActivity {
             });
         }//Request_sent_pending condition Close
 
-        if (CurrentState.equals("He_Request_sent_pending")){
-            requestRef.child(myUser.getUid()).child(userID).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        if (CurrentState.equals(He_Request_sent_pending)){
+            requestRef.child(userID).child(myUser.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
                         HashMap hashMap=new HashMap<>();
-                        hashMap.put("status","Friend");
+                        hashMap.put("status",CurrentState_Friend);
                         hashMap.put("username", username);
                         hashMap.put("fullName", fullName);
                         hashMap.put("ProfileImgUrl", ProfileImgUrl);
-
-                        friendRef.child(userID).child(myUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                        friendRef.child(myUser.getUid()).child(userID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                             @Override
                             public void onComplete(@NonNull Task task) {
                                 if (task.isSuccessful()){
-                                    CurrentState="Friend";
-                                    Toast.makeText(ViewFriendActivity.this, "Friend Request Accepted", Toast.LENGTH_SHORT).show();
-                                    btnSendRequ.setText("Send SMS");
-                                    btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
+                                    friendRef.child(userID).child(myUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                                        @Override
+                                        public void onComplete(@NonNull Task task) {
+                                            CurrentState=CurrentState_Friend;
+                                            Toast.makeText(ViewFriendActivity.this, "Friend Request Accepted", Toast.LENGTH_SHORT).show();
+                                            btnSendRequ.setText("Send SMS");
+                                            btnSendRequ.setBackgroundColor(getColor(R.color.colorgreen));
 
-                                    btnDeclineRequ.setText("Unfriend");
-                                    btnDeclineRequ.setBackgroundColor(getColor(R.color.Red));
+                                            btnDeclineRequ.setText("Unfriend");
+                                            btnDeclineRequ.setBackgroundColor(getColor(R.color.Red));
+                                            btnDeclineRequ.setVisibility(View.VISIBLE);
+                                        }
+                                    });
 
-                                    btnDeclineRequ.setVisibility(View.VISIBLE);
-                                }else {
+                                }
+
+
+                                else {
                                     Toast.makeText(ViewFriendActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -230,8 +288,8 @@ public class ViewFriendActivity extends AppCompatActivity {
                 }
             });
         }// He_Request_sent_pending Close
-        if (CurrentState.equals("Friend")){
-            Toast.makeText(this, "Your are Those Friend....", Toast.LENGTH_SHORT).show();
+        if (CurrentState.equals(CurrentState_Friend)){
+            Toast.makeText(this, "send Friend not configure", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -23,7 +23,7 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\DELL\.android\avd\Khairul_API_34.avd" />
+                  <value value="C:\Users\DELL\.android\avd\Pixel_XL_API_31.avd" />
                 </Key>
               </deviceKey>
             </Target>
@@ -35,6 +35,15 @@
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
                   <value value="C:\Users\DELL\.android\avd\Pixel_XL_API_31.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\DELL\.android\avd\Khairul_API_34.avd" />
                 </Key>
               </deviceKey>
             </Target>
