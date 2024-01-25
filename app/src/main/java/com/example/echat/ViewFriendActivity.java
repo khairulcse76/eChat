@@ -32,7 +32,8 @@ public class ViewFriendActivity extends AppCompatActivity {
     FirebaseUser myUser;
     DatabaseReference userRef, requestRef, friendRef;
 
-    String userID,  ProfileImgUrl, username,fullName,city,country, profession, myProfileImgUrl, myusername, myfullName, mycity, mycountry, myprofession;
+    String userID,  ProfileImgUrl, username,fullName,city,country, profession, myProfileImgUrl,
+            myusername, myfullName, mycity, mycountry, myprofession;
 
     CircleImageView profileImg;
     TextView UserName,inputFullName,address;

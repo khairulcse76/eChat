@@ -254,6 +254,14 @@ public class MainActivity extends AppCompatActivity {
                     //LoadComment(postKey);
                 });*/
 //like and dislike button initialization
+                holder.postImgView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(MainActivity.this,ImageViewFullScrActivity.class);
+                        intent.putExtra("imgURL",model.getPost_img_url());
+                        startActivity(intent);
+                    }
+                });
                 holder.likeIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

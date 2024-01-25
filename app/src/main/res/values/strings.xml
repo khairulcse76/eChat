@@ -44,4 +44,5 @@
     <string name="decline_request">Decline Request</string>
     <string name="send_request">Send Request</string>
     <string name="thakurgaon_bangladesh">Thakurgaon, Bangladesh</string>
+    <string name="full_image_view_for_post">Full Image View For Post</string>
 </resources>
