@@ -32,7 +32,7 @@ public class ViewFriendActivity extends AppCompatActivity {
     FirebaseUser myUser;
     DatabaseReference userRef, requestRef, friendRef;
 
-    String ProfileImgUrl, username,fullName,city,country;
+    String userID,  ProfileImgUrl, username,fullName,city,country, profession, myProfileImgUrl, myusername, myfullName, mycity, mycountry, myprofession;
 
     CircleImageView profileImg;
     TextView UserName,inputFullName,address;
@@ -57,19 +57,19 @@ public class ViewFriendActivity extends AppCompatActivity {
         btnDeclineRequ = findViewById(R.id.btnDeclineRequ);
         btnSendRequ = findViewById(R.id.btnSendRequ);
 
-        String userID = getIntent().getStringExtra("userKey");
+        userID = getIntent().getStringExtra("userKey");
 
         Toast.makeText(this, userID, Toast.LENGTH_SHORT).show();
 
         myAuth=FirebaseAuth.getInstance();
         myUser=myAuth.getCurrentUser();
         assert userID != null;
-        userRef= FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
+        userRef= FirebaseDatabase.getInstance().getReference().child("Users");
         requestRef= FirebaseDatabase.getInstance().getReference().child("Requests");
         friendRef= FirebaseDatabase.getInstance().getReference().child("Friends");
 
-        LoadUsers();
-
+        LoadUsers(userID);
+        LoadMyProfile();
         btnSendRequ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +84,8 @@ public class ViewFriendActivity extends AppCompatActivity {
             }
         });
     } // on Create Close
+
+
 
     private void UnfriendPerform(String userID) {
         if (CurrentState.equals(CurrentState_Friend)){
@@ -250,16 +252,24 @@ public class ViewFriendActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
-                        HashMap hashMap=new HashMap<>();
+                        final HashMap hashMap=new HashMap<>();
                         hashMap.put("status",CurrentState_Friend);
                         hashMap.put("username", username);
                         hashMap.put("fullName", fullName);
                         hashMap.put("ProfileImgUrl", ProfileImgUrl);
+                        hashMap.put("profession", profession);
+
                         friendRef.child(myUser.getUid()).child(userID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                             @Override
                             public void onComplete(@NonNull Task task) {
                                 if (task.isSuccessful()){
-                                    friendRef.child(userID).child(myUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                                    final HashMap myHashMap=new HashMap<>();
+                                    myHashMap.put("status",CurrentState_Friend);
+                                    myHashMap.put("username", myusername);
+                                    myHashMap.put("fullName", myfullName);
+                                    myHashMap.put("ProfileImgUrl", myProfileImgUrl);
+                                    myHashMap.put("profession", myprofession);
+                                    friendRef.child(userID).child(myUser.getUid()).updateChildren(myHashMap).addOnCompleteListener(new OnCompleteListener() {
                                         @Override
                                         public void onComplete(@NonNull Task task) {
                                             CurrentState=CurrentState_Friend;
@@ -272,7 +282,6 @@ public class ViewFriendActivity extends AppCompatActivity {
                                             btnDeclineRequ.setVisibility(View.VISIBLE);
                                         }
                                     });
-
                                 }
 
 
@@ -281,7 +290,6 @@ public class ViewFriendActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
                     }else {
                         Toast.makeText(ViewFriendActivity.this, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
                     }
@@ -293,8 +301,8 @@ public class ViewFriendActivity extends AppCompatActivity {
         }
     }
 
-    private void LoadUsers() {
-        userRef.addValueEventListener(new ValueEventListener() {
+    private void LoadUsers(String userID) {
+        userRef.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
@@ -313,6 +321,9 @@ public class ViewFriendActivity extends AppCompatActivity {
                     if (snapshot.child("country").exists() && snapshot.child("country").getValue()!=null){
                         country=snapshot.child("country").getValue().toString();
                     }
+                    if (snapshot.child("profession").exists() && snapshot.child("profession").getValue()!=null){
+                        profession=snapshot.child("profession").getValue().toString();
+                    }
 
                     UserName.setText(fullName + " ("+ username +")" );
                     Picasso.get().load(ProfileImgUrl).into(profileImg);
@@ -329,4 +340,39 @@ public class ViewFriendActivity extends AppCompatActivity {
             }
         });
     }//load user Close
+    private void LoadMyProfile() {
+        userRef.child(myUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) { //
+                if (snapshot.exists()){
+                    if (snapshot.child("profileImage").exists() && snapshot.child("profileImage").getValue()!=null){
+                        myProfileImgUrl=snapshot.child("profileImage").getValue().toString();
+                    }
+                    if (snapshot.child("username").exists() && snapshot.child("username").getValue()!=null){
+                        myusername=snapshot.child("username").getValue().toString();
+                    }
+                    if (snapshot.child("fullName").exists() && snapshot.child("fullName").getValue()!=null){
+                        myfullName=snapshot.child("fullName").getValue().toString();
+                    }
+                    if (snapshot.child("city").exists() && snapshot.child("city").getValue()!=null){
+                        mycity=snapshot.child("city").getValue().toString();
+                    }
+                    if (snapshot.child("country").exists() && snapshot.child("country").getValue()!=null){
+                        mycountry=snapshot.child("country").getValue().toString();
+                    }
+                    if (snapshot.child("profession").exists() && snapshot.child("profession").getValue()!=null){
+                        myprofession=snapshot.child("profession").getValue().toString();
+                    }
+
+                }else {
+                    Toast.makeText(ViewFriendActivity.this, "Data Not Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ViewFriendActivity.this, error.getMessage()+"", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
