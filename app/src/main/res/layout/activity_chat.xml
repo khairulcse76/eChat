@@ -16,10 +16,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include3"
+        app:layout_constraintVertical_bias="1.0">
 
         <ImageView
             android:id="@+id/btnUploadChatImg"
@@ -35,6 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="Message"
             android:inputType="textMultiLine"
@@ -49,11 +52,11 @@
             android:id="@+id/btnSendMsg"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:contentDescription="TODO"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-            app:srcCompat="@drawable/send_icon"
-            android:contentDescription="TODO" />
+            app:srcCompat="@drawable/send_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -62,17 +65,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyleView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorGray"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include3"
-            app:layout_constraintVertical_bias="0" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyleView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include3"
+        app:layout_constraintVertical_bias="0" />
 
     <!--</ScrollView>-->
 

@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     Toast.makeText(MainActivity.this, "Click to home", Toast.LENGTH_SHORT).show();
                 } else if (id==R.id.nav_Chat) {
-                    Intent intent  = new Intent(MainActivity.this,ChatActivity.class);
+                    Intent intent  = new Intent(MainActivity.this,ChatListActivity.class);
                     startActivity(intent);
                 }else if (id==R.id.nav_friend){
                     Intent intent  = new Intent(MainActivity.this,FriendActivity.class);
