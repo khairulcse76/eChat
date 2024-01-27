@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="@+id/ChatToolBar" />
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/chatOtherusername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -51,9 +51,9 @@
             android:layout_height="wrap_content"
             android:text="offline"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/username"
-            app:layout_constraintStart_toStartOf="@+id/username"
-            app:layout_constraintTop_toBottomOf="@+id/username" />
+            app:layout_constraintEnd_toEndOf="@+id/chatOtherusername"
+            app:layout_constraintStart_toStartOf="@+id/chatOtherusername"
+            app:layout_constraintTop_toBottomOf="@+id/chatOtherusername" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

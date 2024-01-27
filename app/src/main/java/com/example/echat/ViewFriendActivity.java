@@ -3,6 +3,7 @@ package com.example.echat;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -298,7 +299,9 @@ public class ViewFriendActivity extends AppCompatActivity {
             });
         }// He_Request_sent_pending Close
         if (CurrentState.equals(CurrentState_Friend)){
-            Toast.makeText(this, "send Friend not configure", Toast.LENGTH_LONG).show();
+            Intent intent  = new Intent(ViewFriendActivity.this,ChatActivity.class);
+            intent.putExtra("otherUserID",userID);
+            startActivity(intent);
         }
     }
 

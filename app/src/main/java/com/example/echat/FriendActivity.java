@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,15 @@ public class FriendActivity extends AppCompatActivity {
                 /*Picasso.get().load(model.getProfileImgUrl()).into(holder.profileImg);
                 holder.username.setText(model.getFullName() + "(" + model.getUsername() + ")");
                 holder.profession.setText(model.getProfession());*/
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent  = new Intent(FriendActivity.this,ChatActivity.class);
+                        intent.putExtra("otherUserID",getRef(position).getKey().toString());
+                        startActivity(intent);
+                    }
+                });
 
             }
             @NonNull
